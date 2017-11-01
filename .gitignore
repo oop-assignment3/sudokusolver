@@ -1,4 +1,6 @@
 *.class
+*.xml
+*.mf
 build/
 nbproject/
 dist/
