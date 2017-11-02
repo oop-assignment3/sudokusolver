@@ -6,12 +6,11 @@ package sudokusolver;
  */
 public class Grid {
   int grid[][];
-  CellPointer p; // current pointer to cell
+  // current pointer to cell
 	 
   Grid(int[][] input_grid)
   {
     grid = input_grid;
-    p = new CellPointer();
   }
   
   void display()
@@ -25,7 +24,7 @@ public class Grid {
     System.out.println("");
   }
   
-  boolean FindUnassigned()
+  boolean FindUnassigned(CellPointer p)
   {
     for(int i = 0; i < 9; i++)
       for(int j = 0; j < 9; j++)
@@ -37,7 +36,7 @@ public class Grid {
     return false;
   }
   
-  boolean NoConflicts(int num)
+  boolean NoConflicts(int num, CellPointer p)
   {
     //row check
     for(int i = 0; i < 9; i++)
@@ -78,9 +77,8 @@ public class Grid {
   {
     return (val >= start && val <= end);
   }
-  void set_val(int num)
+  void set_val(int num, CellPointer p)
   {
     grid[p.row][p.col] = num;
-    //System.out.println(p.row + " " + p.col + " Num: " + num);
   }
 }

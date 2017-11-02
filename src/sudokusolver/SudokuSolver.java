@@ -8,18 +8,17 @@ public class SudokuSolver {
   static int depth = 0;
   static boolean SolveSudoku(Grid g)
   {
-    System.out.println(++depth + " " + g.p.row + " " + g.p.col);
-    g.display();
-    if(!g.FindUnassigned()) //replace with find first unassigned and noConflicts
+    CellPointer p = new CellPointer();
+    if(!g.FindUnassigned(p)) //replace with find first unassigned and noConflicts
       return true;
     for(int num = 1; num <= 9; num++)
     {
-      if(g.NoConflicts(num))
+      if(g.NoConflicts(num, p))
       {
-        g.set_val(num);
+        g.set_val(num, p);
         if(SolveSudoku(g))
           return true;
-        g.set_val(0);
+        g.set_val(0, p);
       }
     }
     return false;
@@ -46,7 +45,7 @@ public class SudokuSolver {
                      {0,0,2,6,0,9,5,0,0},
                      {8,0,0,2,0,3,0,0,9},
                      {0,0,5,0,1,0,3,0,0}};
-   Grid g = new Grid(grid2);
+   Grid g = new Grid(grid);
    System.out.println(SolveSudoku(g));
    g.display();
   }   
