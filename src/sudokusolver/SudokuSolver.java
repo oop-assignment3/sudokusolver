@@ -1,22 +1,25 @@
 package sudokusolver;
+/*
+* This is our main class which contains the SudokuSolver(), as well as, the main()
+* function. 
+*/
 
-/**
- *
- * @author aranya
- */
 public class SudokuSolver {
-  static int depth = 0;
+  
+  //NOTE: leave the description for this empty
   static boolean SolveSudoku(Grid g)
   {
     CellPointer p = new CellPointer();
+    
     if(!g.FindUnassigned(p)) //replace with find first unassigned and noConflicts
       return true;
-    for(int num = 1; num <= 9; num++)
+    
+    for(int num = 1; num <= 9; num++) // check for each value from 1 to 9
     {
-      if(g.NoConflicts(num, p))
+      if(g.noConflicts(num, p))
       {
         g.set_val(num, p);
-        if(SolveSudoku(g))
+        if(SolveSudoku(g)) // solving the next cell
           return true;
         g.set_val(0, p);
       }
@@ -36,17 +39,24 @@ public class SudokuSolver {
                     {0,0,0,4,1,9,0,0,5},
                     {0,0,0,0,8,0,0,7,9}};
     
-    int grid2[][] = {{0,0,3,0,2,0,6,0,0},
-                     {9,0,0,3,0,5,0,0,1},
-                     {0,0,1,8,0,6,4,0,0},
-                     {0,0,8,1,0,2,9,0,0},
-                     {7,0,0,0,0,0,0,0,8},
-                     {0,0,6,7,0,8,2,0,0},
-                     {0,0,2,6,0,9,5,0,0},
-                     {8,0,0,2,0,3,0,0,9},
-                     {0,0,5,0,1,0,3,0,0}};
+    //this one was designed to work against or algo. It takes 7 secs.
+    int grid_bad[][] = {{0,0,0,0,0,0,0,0,0},
+                     {0,0,0,0,0,3,0,8,5},
+                     {0,0,1,0,2,0,0,0,0},
+                     {0,0,0,5,0,7,0,0,0},
+                     {0,0,4,0,0,0,1,0,0},
+                     {0,9,0,0,0,0,0,0,0},
+                     {5,0,0,0,0,0,0,7,3},
+                     {0,0,2,0,1,0,0,0,0},
+                     {0,0,0,0,4,0,0,0,9}};
+    
    Grid g = new Grid(grid);
-   System.out.println(SolveSudoku(g));
+   //calculating the run time
+   double start_time = System.currentTimeMillis();
+   SolveSudoku(g);
+   double end_time = System.currentTimeMillis();
    g.display();
+   double total_time = (end_time - start_time)/1000;
+   System.out.println("Run time: " + total_time);
   }   
 }

@@ -1,18 +1,18 @@
 package sudokusolver;
-
-/**
- *
- * @author aranya
- */
+/*
+*The Grid class holds the 9x9 sudoku puzzle matrix and all the helper functions
+*for SolveSudoku() in the SudokuSolver class
+*/
 public class Grid {
+  //the 9x9 grid
   int grid[][];
-  // current pointer to cell
 	 
   Grid(int[][] input_grid)
   {
     grid = input_grid;
   }
   
+  //displays the grid. Needs to be more elaborate
   void display()
   {
     for(int i = 0; i < 9; i++)
@@ -24,6 +24,10 @@ public class Grid {
     System.out.println("");
   }
   
+  //Searches for the first unassigned cell (the value 0) and sets CellPointer p
+  //to that value. Also returns a boolean indicating whether it found any unassigned 
+  //value or not. This is function is therefore also used to indicate the completion
+  //of the proccess
   boolean FindUnassigned(CellPointer p)
   {
     for(int i = 0; i < 9; i++)
@@ -33,10 +37,12 @@ public class Grid {
           p.set(i, j);
           return true;
         }
+    
     return false;
   }
   
-  boolean NoConflicts(int num, CellPointer p)
+  //Checks the corresponding row, column and sub grid of num for conflicts
+  boolean noConflicts(int num, CellPointer p)
   {
     //row check
     for(int i = 0; i < 9; i++)
@@ -73,10 +79,13 @@ public class Grid {
     return true;
   }
   
+  //Helper function for noConflicts()
   boolean checkIn(int start, int end, int val)
   {
     return (val >= start && val <= end);
   }
+  
+  //Sets the value of num to the cell located at (p.row, p.col)
   void set_val(int num, CellPointer p)
   {
     grid[p.row][p.col] = num;
