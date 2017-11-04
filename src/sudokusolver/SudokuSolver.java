@@ -1,8 +1,11 @@
 package sudokusolver;
+
 /*
 * This is our main class which contains the SudokuSolver(), as well as, the main()
 * function. 
 */
+
+import java.util.*;
 
 public class SudokuSolver {
   
@@ -27,9 +30,35 @@ public class SudokuSolver {
     return false;
   }
   
-  public static void main(String[] args)
+  public static void main(String[] args) throws InvalidValException
   {
-    int grid[][] = {{5,3,0,0,7,0,0,0,0},
+    int n;
+    do
+    {
+      System.out.println("ENTER YOUR CHOICE\n1.INPUT FROM KEYBOARD\n2.INPUT FROM FILE");
+      Scanner input = new Scanner(System.in);  
+      int grid[][] = new int[9][9];
+      Grid g = new Grid(grid);
+      n = input.nextInt();
+      switch(n)
+      {
+        case 1: g.getUserInput();
+                break;
+       case 2: break;      
+       default:System.out.println("WRONG CHOICE");    
+      }
+      
+      //calculating the run time
+      double start_time = System.currentTimeMillis();
+      SolveSudoku(g);
+      double end_time = System.currentTimeMillis();
+      g.display();
+      double total_time = (end_time - start_time)/1000;
+      System.out.println("Run time: " + total_time);
+      
+    }while(n != 3);
+  /*  
+  int grid[][] = {{5,3,0,0,7,0,0,0,0},
                     {6,0,0,1,9,5,0,0,0},
                     {0,9,8,0,0,0,0,6,0},
                     {8,0,0,0,6,0,0,0,3},
@@ -39,7 +68,7 @@ public class SudokuSolver {
                     {0,0,0,4,1,9,0,0,5},
                     {0,0,0,0,8,0,0,7,9}};
     
-    //this one was designed to work against or algo. It takes 7 secs.
+    //this one was designed to work against our algo. It takes 7 secs.
     int grid_bad[][] = {{0,0,0,0,0,0,0,0,0},
                      {0,0,0,0,0,3,0,8,5},
                      {0,0,1,0,2,0,0,0,0},
@@ -49,14 +78,6 @@ public class SudokuSolver {
                      {5,0,0,0,0,0,0,7,3},
                      {0,0,2,0,1,0,0,0,0},
                      {0,0,0,0,4,0,0,0,9}};
-    
-   Grid g = new Grid(grid);
-   //calculating the run time
-   double start_time = System.currentTimeMillis();
-   SolveSudoku(g);
-   double end_time = System.currentTimeMillis();
-   g.display();
-   double total_time = (end_time - start_time)/1000;
-   System.out.println("Run time: " + total_time);
+    */
   }   
 }

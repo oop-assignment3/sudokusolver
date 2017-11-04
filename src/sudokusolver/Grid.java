@@ -1,9 +1,14 @@
 package sudokusolver;
+
 /*
 *The Grid class holds the 9x9 sudoku puzzle matrix and all the helper functions
 *for SolveSudoku() in the SudokuSolver class
 */
+
+import java.util.*;
+
 public class Grid {
+  
   //the 9x9 grid
   int grid[][];
 	 
@@ -89,5 +94,30 @@ public class Grid {
   void set_val(int num, CellPointer p)
   {
     grid[p.row][p.col] = num;
+  }
+
+  void getUserInput() throws InvalidValException
+  {
+    Scanner input = new Scanner(System.in);
+    for(int i = 0;i < 9; i++)
+      for(int j=0;j<9;j++)
+      {
+        System.out.print("Enter the next number: ");
+        try
+        {
+          grid[i][j] = input.nextInt();
+
+          if(grid[i][j] < 0 || grid[i][j] > 9)
+            throw new InvalidValException(grid[i][j]);
+        }catch(InputMismatchException e1)
+        {
+          System.out.println("Number input is not an integer");
+          return;
+        }catch(InvalidValException e2)
+        {
+          System.out.println(e2);
+          return;
+        }
+      } 
   }
 }
