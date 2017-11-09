@@ -6,33 +6,42 @@ package sudokusolver;
 */
 
 import java.util.*;
+import java.io.*;
 
 public class Grid {
   
   //the 9x9 grid
   int grid[][];
+  Scanner input = new Scanner(System.in);
 	 
   Grid(int[][] input_grid)
   {
     grid = input_grid;
   }
   
-  //displays the grid. Needs to be more elaborate
-  void display()
+  //displays the grid
+  @Override
+  public String toString()
   {
+    String grid_str = new String();
     for(int i = 0; i < 9; i++)
     {
+      if( i % 3 == 0 && i != 0)
+        grid_str = grid_str + "------+------+-----\n";
       for(int j = 0; j < 9; j++)
-        System.out.print(grid[i][j]);
-      System.out.println("");
+      {
+        if(j % 3 == 0 && j != 0)
+          grid_str = grid_str + "|";
+        grid_str = grid_str + grid[i][j] + " ";
+      }
+      grid_str = grid_str + "\n";
     }
-    System.out.println("");
+    return grid_str;
   }
   
   //Searches for the first unassigned cell (the value 0) and sets CellPointer p
   //to that value. Also returns a boolean indicating whether it found any unassigned 
-  //value or not. This is function is therefore also used to indicate the completion
-  //of the proccess
+  //value or not.
   boolean FindUnassigned(CellPointer p)
   {
     for(int i = 0; i < 9; i++)
@@ -96,28 +105,76 @@ public class Grid {
     grid[p.row][p.col] = num;
   }
 
-  void getUserInput() throws InvalidValException
+  void getUserInput()
   {
-    Scanner input = new Scanner(System.in);
-    for(int i = 0;i < 9; i++)
-      for(int j=0;j<9;j++)
+    String num_row;
+    boolean invalid_input = false;
+    
+    for(int i = 0; i < 9; i++)
+    {  
+      do
       {
-        System.out.print("Enter the next number: ");
+        System.out.print("Enter row " + (i + 1) + ": ");
+        num_row = input.nextLine();
+        
         try
         {
-          grid[i][j] = input.nextInt();
-
-          if(grid[i][j] < 0 || grid[i][j] > 9)
-            throw new InvalidValException(grid[i][j]);
-        }catch(InputMismatchException e1)
+          if(num_row.length() != 9)
+            throw new InvalidLengthException();
+        }catch(InvalidLengthException e)
         {
-          System.out.println("Number input is not an integer");
-          return;
-        }catch(InvalidValException e2)
-        {
-          System.out.println(e2);
-          return;
+          System.out.println(e);
+          invalid_input = true;
+          continue;
         }
-      } 
+        
+        invalid_input = checkRow(num_row, i);
+        
+      }while(invalid_input);
+    }
   }
+  
+  void getFileInput(String file_name)
+  {
+    try(FileReader fr = new FileReader(file_name))
+    {
+      StringBuilder entire_text = new StringBuilder();
+      int ch;
+      
+      while((ch = fr.read()) != -1)
+        entire_text.append((char)ch);
+      
+      String rows[] = entire_text.toString().split("\n");
+      
+      for(int i = 0; i < 9; i++)
+      {
+        if(checkRow(rows[i], i))
+          System.exit(0);
+      }
+      
+    }catch(IOException e)
+    {
+      System.out.println(e);
+      System.exit(0);
+    }
+  }
+  
+  boolean checkRow(String num_row, int i)
+  {
+    for(int j = 0; j < 9; j++)
+    {
+      grid[i][j] = num_row.charAt(j) - '0';
+      try
+      {
+        if(grid[i][j] < 0 || grid[i][j] > 9)
+          throw new InvalidValException(grid[i][j]);
+      }catch(InvalidValException e)
+      {
+        System.out.println(e);
+        return true;
+      }
+    }
+    return false;
+  }
+  
 }

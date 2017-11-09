@@ -6,6 +6,7 @@ package sudokusolver;
 */
 
 import java.util.*;
+import java.io.*;
 
 public class SudokuSolver {
   
@@ -30,54 +31,54 @@ public class SudokuSolver {
     return false;
   }
   
-  public static void main(String[] args) throws InvalidValException
+  public static void main(String[] args) throws InvalidValException, InvalidLengthException        
   {
     int n;
-    do
+    Scanner input = new Scanner(System.in);
+    
+    System.out.println("Enter you choice\n1. Input from keyboard\n2. Input from file");
+    n = input.nextInt();
+    String file_name = null; 
+    int grid[][] = new int[9][9];
+    Grid g = new Grid(grid);
+      
+    switch(n)
     {
-      System.out.println("ENTER YOUR CHOICE\n1.INPUT FROM KEYBOARD\n2.INPUT FROM FILE");
-      Scanner input = new Scanner(System.in);  
-      int grid[][] = new int[9][9];
-      Grid g = new Grid(grid);
-      n = input.nextInt();
-      switch(n)
+      case 1: g.getUserInput();
+              break;
+      case 2: System.out.println("Enter file name: ");
+              file_name = input.next();
+              g.getFileInput(file_name);
+              break;     
+      default: System.out.println("Invalid Option");return; 
+    }
+      
+    //calculating the run time
+    double start_time = System.currentTimeMillis();
+    boolean solved = SolveSudoku(g);
+    double end_time = System.currentTimeMillis();
+    double total_time = (end_time - start_time)/1000;
+    
+    if(solved)
+    {
+      if(n == 1)
       {
-        case 1: g.getUserInput();
-                break;
-       case 2: break;      
-       default:System.out.println("WRONG CHOICE");    
+        System.out.println(g.toString());
+        System.out.println("Run time: " + total_time);
       }
       
-      //calculating the run time
-      double start_time = System.currentTimeMillis();
-      SolveSudoku(g);
-      double end_time = System.currentTimeMillis();
-      g.display();
-      double total_time = (end_time - start_time)/1000;
-      System.out.println("Run time: " + total_time);
+      if(n == 2)
+      {
+        try(FileWriter fw = new FileWriter(file_name+".sol"))
+        {
+          fw.write(g.toString());
+        }catch(IOException e)
+        {
+          System.out.println(e);
+        }
+      }
       
-    }while(n != 3);
-  /*  
-  int grid[][] = {{5,3,0,0,7,0,0,0,0},
-                    {6,0,0,1,9,5,0,0,0},
-                    {0,9,8,0,0,0,0,6,0},
-                    {8,0,0,0,6,0,0,0,3},
-                    {4,0,0,8,0,3,0,0,1},
-                    {7,0,0,0,2,0,0,0,6},
-                    {0,6,0,0,0,0,2,8,0},
-                    {0,0,0,4,1,9,0,0,5},
-                    {0,0,0,0,8,0,0,7,9}};
-    
-    //this one was designed to work against our algo. It takes 7 secs.
-    int grid_bad[][] = {{0,0,0,0,0,0,0,0,0},
-                     {0,0,0,0,0,3,0,8,5},
-                     {0,0,1,0,2,0,0,0,0},
-                     {0,0,0,5,0,7,0,0,0},
-                     {0,0,4,0,0,0,1,0,0},
-                     {0,9,0,0,0,0,0,0,0},
-                     {5,0,0,0,0,0,0,7,3},
-                     {0,0,2,0,1,0,0,0,0},
-                     {0,0,0,0,4,0,0,0,9}};
-    */
+    }
+    else System.out.println("Invalid puzzle");
   }   
 }

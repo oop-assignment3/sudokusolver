@@ -1,10 +1,5 @@
-
 package sudokusolver;
 
-/**
- *
- * @author Admin
- */
 class InvalidValException extends Exception
 {
   int cell_val;
@@ -17,4 +12,13 @@ class InvalidValException extends Exception
   {
     return "Invalid Cell Value: " + cell_val;
   } 
+}
+
+class InvalidLengthException extends Exception
+{
+  @Override
+  public String toString()
+  {
+    return "Invalid row length";
+  }
 }
