@@ -1,8 +1,8 @@
 package sudokusolver;
 
 /*
-* This is our main class which contains the SudokuSolver(), as well as, the main()
-* function. 
+* This is our main class which contains the SudokuSolver(), as well as, the
+* main() function. 
 */
 
 import java.util.*;
@@ -10,12 +10,12 @@ import java.io.*;
 
 public class SudokuSolver {
   
-  //NOTE: leave the description for this empty
+  //The function which solves the grid using backtracking
   static boolean SolveSudoku(Grid g)
   {
     CellPointer p = new CellPointer();
     
-    if(!g.FindUnassigned(p)) //replace with find first unassigned and noConflicts
+    if(!g.FindUnassigned(p)) //Find unnasigned value and set CellPointer to it
       return true;
     
     for(int num = 1; num <= 9; num++) // check for each value from 1 to 9
@@ -25,24 +25,26 @@ public class SudokuSolver {
         g.set_val(num, p);
         if(SolveSudoku(g)) // solving the next cell
           return true;
-        g.set_val(0, p);
+        g.set_val(0, p); //This is done when the previous recursive call returns false
       }
     }
-    return false;
+    return false; //This the statement that triggers backtracking
   }
   
   public static void main(String[] args) throws InvalidValException, InvalidLengthException        
   {
-    int n;
+    int option; //choice between console input and file
     Scanner input = new Scanner(System.in);
     
     System.out.println("Enter you choice\n1. Input from keyboard\n2. Input from file");
-    n = input.nextInt();
-    String file_name = null; 
+    option = input.nextInt();
+     
     int grid[][] = new int[9][9];
     Grid g = new Grid(grid);
       
-    switch(n)
+    String file_name = null;
+    
+    switch(option)
     {
       case 1: g.getUserInput();
               break;
@@ -53,31 +55,26 @@ public class SudokuSolver {
       default: System.out.println("Invalid Option");return; 
     }
       
-    //calculating the run time
+    //Calculating the run time
     double start_time = System.currentTimeMillis();
     boolean solved = SolveSudoku(g);
     double end_time = System.currentTimeMillis();
     double total_time = (end_time - start_time)/1000;
     
+    //Printing the solution and runtime. Also writing the solution to a file
     if(solved)
     {
-      if(n == 1)
-      {
-        System.out.println(g.toString());
-        System.out.println("Run time: " + total_time);
-      }
+      System.out.println("\nThe solved sudoku is:\n\n" + g.toString());
+      System.out.println("\nRun time: " + total_time);
       
-      if(n == 2)
+      try(FileWriter fw = new FileWriter(file_name+".sol"))
       {
-        try(FileWriter fw = new FileWriter(file_name+".sol"))
-        {
-          fw.write(g.toString());
-        }catch(IOException e)
-        {
-          System.out.println(e);
-        }
+        fw.write(g.toString());
+        System.out.println("\nSolution file: " + file_name + ".sol");
+      }catch(IOException e)
+      {
+        System.out.println(e);
       }
-      
     }
     else System.out.println("Invalid puzzle");
   }   

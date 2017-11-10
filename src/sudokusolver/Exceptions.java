@@ -1,3 +1,6 @@
+/*
+ * This file contains our two user defined exceptions.
+*/
 package sudokusolver;
 
 class InvalidValException extends Exception
@@ -19,6 +22,6 @@ class InvalidLengthException extends Exception
   @Override
   public String toString()
   {
-    return "Invalid row length";
+    return "Invalid row length.";
   }
 }

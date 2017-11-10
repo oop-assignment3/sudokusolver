@@ -19,7 +19,7 @@ public class Grid {
     grid = input_grid;
   }
   
-  //displays the grid
+  //Returns a string representing the sudoku grid
   @Override
   public String toString()
   {
@@ -105,6 +105,8 @@ public class Grid {
     grid[p.row][p.col] = num;
   }
 
+  //Gets row-wise input from the user. It also forces the user to input valid 
+  //cell values
   void getUserInput()
   {
     String num_row;
@@ -134,6 +136,7 @@ public class Grid {
     }
   }
   
+  //Reads the grid from file file_name
   void getFileInput(String file_name)
   {
     try(FileReader fr = new FileReader(file_name))
@@ -159,6 +162,7 @@ public class Grid {
     }
   }
   
+  //Checks a row num_row(as a String value) for length and 
   boolean checkRow(String num_row, int i)
   {
     for(int j = 0; j < 9; j++)
